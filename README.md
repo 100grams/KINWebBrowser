@@ -29,10 +29,11 @@ KINWebBrowser consists of a single component:
 *`KINWebBrowserViewController` must be contained in a UINavigationController.*
 
 **Pushing to the navigation stack:**
-```objective-c
-KINWebBrowserViewController *webBrowser = [KINWebBrowserViewController webBrowser];
-[self.navigationController pushViewController:webBrowser animated:YES];
-[webBrowser loadURLString:@"http://www.example.com"];
+```swift
+if let webBrowser = KINWebBrowserViewController.webBrowser() {
+    webBrowser.loadURLString("http://www.example.com")
+    self.navigationController?.pushViewController(webBrowser, animated: true)
+}
 ```
 
 **Presenting Modally:**
@@ -53,7 +54,7 @@ Installation
 ###### Podfile
 
 ```ruby
-platform :ios, '7.0'
+platform :ios, '8.0'
 pod 'KINWebBrowser'
 ```
 
@@ -72,19 +73,23 @@ Customizing the User Interface
 
 The tint color of the toolbars and toolbar items can be customized.
 
-```
-webBrowser.tintColor = [UIColor blueColor];
-webBrowser.barTintColor = [UIColor blackColor];
+```swift
+webBrowser.tintColor = UIColor.blue
+webBrowser.barTintColor = UIColor.black
 ```
 
 **Title Bar Content** 
 
 The URL can be shown in the `UINavigationBar` while loading. The title of the page can be shown when loading completes.
-```
-webBrowser.showsURLInNavigationBar = NO;
-webBrowser.showsPageTitleInNavigationBar = YES;
+```swift
+webBrowser.showsURLInNavigationBar = false
+webBrowser.showsPageTitleInNavigationBar = true
 ```
 
+**Toolbar**
+```swift
+webBrowser.toolbarHidden = true // hides the bottom toolbar, added in 1.5.0
+```
 
 Implementing `KINWebBrowserDelegate` Protocol
 ------------------------

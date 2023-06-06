@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "KINWebBrowser"
-  s.version      = "1.4.0"
+  s.version      = "1.5.0"
   s.summary      = "A web browser module for your apps."
   s.description  = <<-DESC
                    KINWebBrowser is a web browser module for your apps, powered by WKWebView. 
