@@ -100,6 +100,7 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
         }
         self.wkWebView.allowsBackForwardNavigationGestures = true;
         
+        self.toolbarHidden = NO;
         self.actionButtonHidden = NO;
         self.showsURLInNavigationBar = NO;
         self.showsPageTitleInNavigationBar = YES;
@@ -139,7 +140,7 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [self.navigationController setToolbarHidden:NO animated:YES];
+    [self.navigationController setToolbarHidden:self.toolbarHidden animated:YES];
     
     [self.navigationController.navigationBar addSubview:self.progressView];
     
@@ -277,7 +278,7 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
     
     NSArray *barButtonItems;
     if(self.wkWebView.loading) {
-        if(!self.actionButtonHidden) {
+        if(!self.actionButtonHidden && !self.toolbarHidden) {
             barButtonItems = @[self.backButton, self.flexibleSeparator, self.forwardButton, self.flexibleSeparator, self.stopButton];
             NSMutableArray *mutableBarButtonItems = [NSMutableArray arrayWithArray:barButtonItems];
             [mutableBarButtonItems addObject:self.flexibleSeparator];
@@ -297,7 +298,7 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
         }
     }
     else {
-        if(!self.actionButtonHidden) {
+        if(!self.actionButtonHidden && !self.toolbarHidden) {
             barButtonItems = @[self.backButton, self.flexibleSeparator, self.forwardButton, self.flexibleSeparator, self.refreshButton];
             NSMutableArray *mutableBarButtonItems = [NSMutableArray arrayWithArray:barButtonItems];
             [mutableBarButtonItems addObject:self.flexibleSeparator];
@@ -314,9 +315,13 @@ static void *KINWebBrowserContext = &KINWebBrowserContext;
     }
     
     if(!self.actionButtonHidden) {
-        NSMutableArray *mutableBarButtonItems = [NSMutableArray arrayWithArray:barButtonItems];
-        [mutableBarButtonItems addObject:self.actionButton];
-        barButtonItems = [NSArray arrayWithArray:mutableBarButtonItems];
+        if (self.toolbarHidden) {
+            self.navigationItem.rightBarButtonItem = self.actionButton;
+        } else {
+            NSMutableArray *mutableBarButtonItems = [NSMutableArray arrayWithArray:barButtonItems];
+            [mutableBarButtonItems addObject:self.actionButton];
+            barButtonItems = [NSArray arrayWithArray:mutableBarButtonItems];
+        }
     }
     
     [self setToolbarItems:barButtonItems animated:YES];
